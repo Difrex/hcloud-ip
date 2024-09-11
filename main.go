@@ -14,6 +14,7 @@ func main() {
 
 	apiKey := flag.String("key", "HCloud API Key", "-key xaxaxaxax")
 	floatIP := flag.String("ip", "Name of Floating IP", "-ip voip")
+	hostname := flag.String("hostname", "Name of the cloud server", "-hostname server.host.name")
 	flag.Parse()
 
 	// Check for API Key
@@ -25,10 +26,14 @@ func main() {
 		log.Fatalf("No Floating IP specified!")
 	}
 
-	// Get System Hostname
-	name, err := os.Hostname()
-	if err != nil {
-		panic(err)
+	name := *hostname
+	if name == "" {
+		// Get System Hostname
+		n, err := os.Hostname()
+		if err != nil {
+			panic(err)
+		}
+		name = n
 	}
 
 	// Initialize HCloud Client
